@@ -1,6 +1,6 @@
 import params from '../params';
 
-export default function SearchBox({addParam}) {
+export default function SearchBox({ addParam }) {
 
     return (
         <>
@@ -9,9 +9,9 @@ export default function SearchBox({addParam}) {
             <select onChange={e => addParam(e.target.value)}>
                 <option disabled selected value> -- select an option -- </option>
 
-                {Object.entries(params).map((i,j) => {
+                {Object.entries(params).map((i, j) => {
                     return (
-                        <option key={j} id={i[0]}>{i[1].title} </option>
+                        <option key={j} value={j}>{i[1].title} </option>
                     )
 
                 })}
