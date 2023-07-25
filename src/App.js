@@ -9,7 +9,13 @@ const API_KEY = "7bbbe81cbe8b6c0236aed02fad02e1dc";
 const APP_ID = "ebc0f8c5";
 const API_URL = "https://api.edamam.com/api/recipes/v2";
 
+const defaultQueryParams = new URLSearchParams({
+  app_id: APP_ID,
+  app_key: API_KEY,
+  type: "public",
+}).toString();
 
+let testArray = [];
 
 let test = new Set();
 let test2 = new Set();
@@ -24,11 +30,7 @@ Object.values(params).forEach((i, j) => {
         value: `${k}`,
         label: `${k}`
       }
-      console.log(i.list[l])
     });
-
-    console.log([...i.list]);
-
   }
 });
 
@@ -49,24 +51,43 @@ function App() {
       setTheSelect((currSelect) => {
         return [
           ...currSelect,
-          Object.values(params)[e]
+          {
+            ...Object.values(params)[e],
+            param: Object.keys(params)[e],
+            index: e
+          }
         ]
       });
     }
 
   }
 
-  function addQuery(e) {
-    console.log(e);
+  //find the index of these queries, correspond them to an array that has them stored, so you can update those indices
+
+  function addQuery(index, param, e) {
+    
+    if (Array.isArray(e)) {
+  
+      const test = e.reduce((i, j) =>
+        [...i, `${param}=${j.value}`],
+        []
+      ).
+        join('&');
+
+      testArray[index] = test;
+      console.log(testArray);
+
+    } else {
+      const test = `${param}=${e.value}`
+      testArray[index] = test;
+      console.log(testArray);
+    }
   }
 
   return (
     <>
       <Header />
-
-
       <SearchBox addParam={addParam} />
-
       <SearchForm settings={theSelect} addQuery={addQuery} />
     </>
   );

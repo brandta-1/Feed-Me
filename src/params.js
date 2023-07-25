@@ -122,13 +122,13 @@ const params = {
     },
     calories: {
         title: 'Calorie Limit',
-        min: 300,
+        min: 1,
         max: 3000,
         type: 'range'
     },
     time: {
         title: 'Time Limit',
-        min: 0,
+        min: 1,
         max: 100,
         type: 'range'
     }
