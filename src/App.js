@@ -4,25 +4,18 @@ import params from './params';
 import Header from './components/Header';
 import SearchBox from './components/SearchBox';
 import SearchForm from './components/SearchForm';
-
+import Results from './components/Results';
 const API_KEY = "7bbbe81cbe8b6c0236aed02fad02e1dc";
 const APP_ID = "ebc0f8c5";
 const API_URL = "https://api.edamam.com/api/recipes/v2";
 
 const defaultQueryParams = new URLSearchParams({
+  type: "public",
   app_id: APP_ID,
   app_key: API_KEY,
-  type: "public",
 }).toString();
 
-let testArray = [];
-
-let test = new Set();
-let test2 = new Set();
-
 Object.values(params).forEach((i, j) => {
-  test.add(i);
-
   if (i.type === 'select' || i.type === 'multiple') {
 
     i.list.forEach((k, l) => {
@@ -36,51 +29,75 @@ Object.values(params).forEach((i, j) => {
 
 function App() {
 
-  console.log(params);
-
-
   const [theSelect, setTheSelect] = useState([]);
+  const [theQuery, setTheQuery] = useState([]);
+  const [theHits, setTheHits] = useState(null);
 
-  function addParam(e) {
+  function testPrint(e) {
+    e.preventDefault();
 
-    //rework this so the set is literally just the indices
-    if (test2.size === test2.add([...test][e]).size) {
-      console.log("nothing changed");
-      return;
-    } else {
-      setTheSelect((currSelect) => {
-        return [
-          ...currSelect,
-          {
-            ...Object.values(params)[e],
-            param: Object.keys(params)[e],
-            index: e
-          }
-        ]
-      });
-    }
+    const query = theQuery.reduce((i, j) =>
+      [...i, `${j}`],
+      []
+    ).
+      join('&');
 
+    const getURL = `${API_URL}?${defaultQueryParams}&${query.replaceAll(" ", "%20")}`;
+    console.log(getURL);
+    fetch(getURL)
+      .then((res) => res.json())
+      .then((res) => {
+        setTheHits(res.hits)
+      })
   }
 
-  //find the index of these queries, correspond them to an array that has them stored, so you can update those indices
+  function addParam(e) {
+    console.log("RUNNNNING")
+    e = e.map(({ value }) => value)
 
-  function addQuery(index, param, e) {
-    
+    console.log(e);
+
+    theQuery.forEach((_, j) => {
+      if (!e.includes(j)) {
+        setTheQuery((currQuery) => {
+          currQuery[j] = null
+          return currQuery
+        })
+      }
+    })
+
+    setTheSelect(() => {
+      return e.map((i) => {
+        return {
+          ...Object.values(params)[i],
+          param: Object.keys(params)[i],
+          index: i
+        }
+      })
+    })
+  }
+
+  function addQuery(e, index, param) {
+
     if (Array.isArray(e)) {
-  
-      const test = e.reduce((i, j) =>
+
+      const query = e.reduce((i, j) =>
         [...i, `${param}=${j.value}`],
         []
       ).
         join('&');
+      addQuery(query, index)
 
-      testArray[index] = test;
-      console.log(testArray);
+    } else if (e.value) {
+      const query = `${param}=${e.value}`
+      addQuery(query, index)
 
     } else {
-      const test = `${param}=${e.value}`
-      testArray[index] = test;
-      console.log(testArray);
+      console.log(e);
+      setTheQuery((currQuery) => {
+        currQuery[index] = e
+        return currQuery
+      })
     }
   }
 
@@ -88,7 +105,8 @@ function App() {
     <>
       <Header />
       <SearchBox addParam={addParam} />
-      <SearchForm settings={theSelect} addQuery={addQuery} />
+      <SearchForm settings={theSelect} addQuery={addQuery} tf={testPrint} />
+      <Results hits={theHits} />
     </>
   );
 }
