@@ -1,26 +1,9 @@
 import { SearchSelect, SearchRange, SearchText } from './SearchComponents';
+import React from 'react';
 
-export default function SearchForm({ settings, addQuery }) {
+export default function SearchForm({ settings, addQuery, tf }) {
 
     console.log("you re-rendered lol");
-
-    function RenderForm(i) {
-        if (i.type === 'select' || i.type === 'multiple') {
-            return (
-                <SearchSelect i={i} f={addQuery} />
-            )
-        }
-        if (i.type === 'range') {
-            return (
-                <SearchRange i={i} f={addQuery} />
-            )
-        }
-        if (i.type === 'text') {
-            return (
-                <SearchText i={i} f={addQuery} />
-            )
-        }
-    }
 
     return (
         <>
@@ -29,14 +12,17 @@ export default function SearchForm({ settings, addQuery }) {
                 return (
                     <>
                         <p>{i.title}</p>
-                        {RenderForm(i)}
-                        <button>delete</button>
+                        {React.createElement(i.type === 'select' || i.type === 'multiple' ?
+                            SearchSelect : (i.type === 'range' ? SearchRange : SearchText), {
+                            i: i,
+                            f: addQuery
+                        })}
                     </>
                 )
             })}
 
             {settings.length > 0 &&
-                <button>Search</button>
+                <button onClick={(e) => tf(e)}>Search</button>
             }
         </>
     )

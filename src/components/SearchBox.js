@@ -1,24 +1,22 @@
+import Select from 'react-select';
 import params from '../params';
 
 export default function SearchBox({ addParam }) {
 
+    const theParams = Object.values(params).map((i, j) => {
+        return {
+            value: j,
+            label: i.title
+        }
+    })
+
     return (
         <>
-            <div className="search-box" />
-
-            <select onChange={e => addParam(e.target.value)}>
-                <option disabled selected value> -- select an option -- </option>
-
-                {Object.entries(params).map((i, j) => {
-                    return (
-                        <option key={j} value={j}>{i[1].title} </option>
-                    )
-
-                })}
-
-            </select>
-
-            <div />
+            <Select
+                options={theParams}
+                onChange={e => addParam(e)}
+                isMulti={true}
+            />
         </>
     )
 }
