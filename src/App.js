@@ -1,7 +1,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import params from './params';
-import Header from './components/Header';
 import SearchBox from './components/SearchBox';
 import SearchForm from './components/SearchForm';
 import Results from './components/Results';
@@ -15,9 +14,10 @@ const defaultQueryParams = new URLSearchParams({
   app_key: API_KEY,
 }).toString();
 
-Object.values(params).forEach((i, j) => {
+Object.values(params).forEach((i) => {
   if (i.type === 'select' || i.type === 'multiple') {
 
+    //this is needed for the Select library to properly function
     i.list.forEach((k, l) => {
       i.list[l] = {
         value: `${k}`,
@@ -52,10 +52,8 @@ function App() {
   }
 
   function addParam(e) {
-    console.log("RUNNNNING")
-    e = e.map(({ value }) => value)
 
-    console.log(e);
+    e = e.map(({ value }) => value)
 
     theQuery.forEach((_, j) => {
       if (!e.includes(j)) {
@@ -93,7 +91,6 @@ function App() {
       addQuery(query, index)
 
     } else {
-      console.log(e);
       setTheQuery((currQuery) => {
         currQuery[index] = e
         return currQuery
@@ -103,10 +100,16 @@ function App() {
 
   return (
     <>
-      <Header />
-      <SearchBox addParam={addParam} />
-      <SearchForm settings={theSelect} addQuery={addQuery} tf={testPrint} />
-      <Results hits={theHits} />
+      <body>
+        <h1>welcome to feed me</h1>
+        <main>
+          <SearchBox addParam={addParam} />
+          <SearchForm settings={theSelect} addQuery={addQuery} tf={testPrint} />
+          <div className="results">
+            <Results hits={theHits} />
+          </div>
+        </main>
+      </body>
     </>
   );
 }
