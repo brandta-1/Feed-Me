@@ -12,7 +12,7 @@ concurrency:
   run:
     shell: bash
 
-    jobs:
+jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
