@@ -3,8 +3,6 @@ import React from 'react';
 
 export default function SearchForm({ settings, addQuery, tf }) {
 
-    console.log("you re-rendered lol");
-
     return (
         <>
             {settings.map((i, j) => {
