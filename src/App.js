@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import params from './params';
 import SearchBox from './components/SearchBox';
 import SearchForm from './components/SearchForm';
@@ -36,11 +36,7 @@ function App() {
   function testPrint(e) {
     e.preventDefault();
 
-    const query = theQuery.reduce((i, j) =>
-      [...i, `${j}`],
-      []
-    ).
-      join('&');
+    const query = theQuery.reduce((i, j) => [...i, `${j}`], []).join('&');
 
     const getURL = `${API_URL}?${defaultQueryParams}&${query.replaceAll(" ", "%20")}`;
     console.log(getURL);
@@ -79,11 +75,7 @@ function App() {
 
     if (Array.isArray(e)) {
 
-      const query = e.reduce((i, j) =>
-        [...i, `${param}=${j.value}`],
-        []
-      ).
-        join('&');
+      const query = e.reduce((i, j) => [...i, `${param}=${j.value}`], []).join('&');
       addQuery(query, index)
 
     } else if (e.value) {

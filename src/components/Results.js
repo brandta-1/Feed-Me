@@ -12,7 +12,7 @@ function ResultCard({ item }) {
     return (
         <div className="recipe-card">
             <h1>{label}</h1>
-            <img src={imageUrl} wdith={width} height={height} alt="image unavailable" />
+            <img src={imageUrl} wdith={width} height={height} alt="unavailable" />
             <a href={recipeUrl}>View Recipe</a>
         </div>
     )

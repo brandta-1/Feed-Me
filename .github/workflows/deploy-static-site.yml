@@ -40,8 +40,11 @@ jobs:
 
       - name: Build Site
         run: npm run build
+        env:
+          CI: false
 
       - name: Deploy Static Site
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build
+    

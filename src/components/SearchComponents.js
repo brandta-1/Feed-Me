@@ -8,7 +8,7 @@ export function SearchSelect({ i, f }) {
             <Select
                 options={i.list}
                 onChange={e => f(e, i.index, i.param)}
-                isMulti={i.type == 'multiple'}
+                isMulti={i.type === 'multiple'}
             />
         </>
     )
